@@ -1,31 +1,43 @@
 const express = require("express");
-const UserModel = require("./models/Users");
 const app = express();
 const mongoose = require("mongoose");
-app.use(express.json())
+const cors = require("cors");
+const authRoutes = require("./Routes/AuthRoutes");
+const cookieParser = require("cookie-parser");
+mongoose.set('strictQuery', true);
+require('dotenv').config();
 
-mongoose.connect(
-  "mongodb+srv://nrob92:Nrob1992@seed-oil-app.3msosdv.mongodb.net/Seed-Oil-App?retryWrites=true&w=majority"
-);
-
-app.get("/getUsers", (req, res) => {
-  UserModel.find({}, (err, result) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(result);
-    }
-  });
-});
-
-
-app.post("/createUser", async (req, res) => {
-  const user = req.body;
-  const newUser = new UserModel(user);
-  await newUser.save();
-  res.json(user)
-});
+const port = process.env.REACT_APP_MONGO_CONNECTION;
 
 app.listen(3001, () => {
   console.log("SERVER RUNNING");
 });
+
+mongoose
+  .connect(
+    port,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    console.log("DB Connection successfull");
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    method: ["GET", "POST"],
+    credentials: true,
+  })
+);
+
+app.use(cookieParser());
+
+app.use(express.json());
+
+app.use("/", authRoutes);
