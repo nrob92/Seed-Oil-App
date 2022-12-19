@@ -1,12 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import Map from "../Components/Map/Map";
+import { Grid } from "@mui/material";
+import List from "../Components/List/List";
+import { getPlacesData } from "../api";
+import { useContext } from "react";
+import LoginContext from "../Contexts/LoginContext";
 
 const Home = () => {
+  const { setLoggedIn } = useContext(LoginContext);
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [places, setPlaces] = useState([]);
+  const [coordinates, setCoordinates] = useState({});
+  const [bounds, setBounds] = useState(null);
+
   useEffect(() => {
     const verifyUser = async () => {
       if (!cookies.jwt) {
@@ -23,27 +34,46 @@ const Home = () => {
           removeCookie("jwt");
           navigate("/login");
         } else
-          toast(`Hi ${data.user} 🦄`, {
+        setLoggedIn(true)
+          toast.success(`Hi ${data.user} 🦄`, {
             theme: "dark",
+            toastId: "success1",
           });
       }
     };
     verifyUser();
   }, [cookies, navigate, removeCookie]);
 
-  const logOut = () => {
-    removeCookie("jwt");
-    navigate("/login");
-  };
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => {
+        setCoordinates({ lat: latitude, lng: longitude });
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    getPlacesData(bounds?.ne, bounds?.sw).then((data) => {
+      setPlaces(data);
+    });
+  }, [coordinates, bounds]);
+
   return (
     <>
-      <div className="private">
-        <h1>Home</h1>
-        <button onClick={logOut}>Log out</button>
-      </div>
+      <Grid container style={{ width: "100%" }}>
+        <Grid item xs={12} md={4}>
+          <List places={places} />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Map
+            setCoordinates={setCoordinates}
+            setBounds={setBounds}
+            coordinates={coordinates}
+          />
+        </Grid>
+      </Grid>
       <ToastContainer />
     </>
   );
 };
-
 export default Home;
