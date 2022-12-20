@@ -16,7 +16,7 @@ import "../PlaceDetails/placeDetailsStyle.css";
 
 const PlaceDetails = ({ place,selected,refProp }) => {
 
-console.log(selected);
+
  if (selected) refProp?.current?.scrollIntoView({behavior:"smooth",block:"start"})
  
   return (
@@ -41,7 +41,7 @@ console.log(selected);
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <Rating value={Number(place.rating)} readOnly></Rating>
+          <Rating value={Number(place.rating)} precision={0.5} readOnly></Rating>
           <Typography gutterBottom variant="subtitle1"> out of
             {place.num_reviews} reviews
           </Typography>

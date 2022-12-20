@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 
-const List = ({ places, childClicked, isLoading }) => {
-  const [rating, setRating] = useState("");
+const List = ({ places, childClicked, isLoading, rating,setRating }) => {
+ 
   const [elRefs, setElRefs] = useState([]);
 
   useEffect(() => {

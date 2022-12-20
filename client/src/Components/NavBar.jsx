@@ -14,6 +14,8 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import { LoginContext } from "../Contexts/LoginContext";
+import { Autocomplete } from "@react-google-maps/api";
+import { useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,16 +59,26 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function NavBar() {
-  const { loggedIn,setLoggedIn } = useContext(LoginContext);
+export default function NavBar({ setCoords }) {
+  const { loggedIn, setLoggedIn } = useContext(LoginContext);
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [autocomplete, setAutocomplete] = useState(null);
 
   const logOut = () => {
     removeCookie("jwt");
     navigate("/login");
-    setLoggedIn(false)
+    setLoggedIn(false);
   };
+
+  const onLoad = (autoC) => setAutocomplete(autoC);
+
+  const onPlaceChanged = () => {
+    const lat = autocomplete.getPlace().geometry.location.lat();
+    const lng = autocomplete.getPlace().geometry.location.lng();
+    setCoords({ lat, lng });
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -93,10 +105,12 @@ export default function NavBar() {
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
+              <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                />
+              </Autocomplete>
             </Search>
             {loggedIn ? (
               <Button onClick={logOut} variant="contained">

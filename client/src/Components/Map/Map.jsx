@@ -5,8 +5,9 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Paper, Typography } from "@mui/material";
 import "../Map/mapStyles.css";
 import Rating from "@mui/material/Rating";
+import mapStyles from "./mapStyles"
 
-const Map = ({ setCoords, setBounds, coords, places,setChildClicked }) => {
+const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
   const isDesktop = window.matchMedia("(max-width: 600px)");
   // const { isLoaded } = useLoadScript({
   //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -16,11 +17,9 @@ const Map = ({ setCoords, setBounds, coords, places,setChildClicked }) => {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "90vh",
         width: "100%",
-        marginLeft: "25px",
-        marginRight: "25px",
-        marginTop: "25px",
+        padding: "25px",
       }}
     >
       <GoogleMapReact
@@ -28,12 +27,14 @@ const Map = ({ setCoords, setBounds, coords, places,setChildClicked }) => {
         center={coords}
         defaultCenter={coords}
         defaultZoom={14}
-        options={""}
+        options={{ disableDefaultUI: true, zoomControl: true, styles: mapStyles}}
         onChange={(e) => {
           setCoords({ lat: e.center.lat, lng: e.center.lng });
           setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
         }}
-        onChildClick={(child) => {setChildClicked(child)}}
+        onChildClick={(child) => {
+          setChildClicked(child);
+        }}
       >
         {places?.map((place, i) => (
           <div
@@ -64,6 +65,7 @@ const Map = ({ setCoords, setBounds, coords, places,setChildClicked }) => {
                 />
                 <Rating
                   size="small"
+                  precision={0.5}
                   value={Number(place.rating)}
                   readOnly
                 ></Rating>

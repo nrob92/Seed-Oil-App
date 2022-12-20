@@ -9,16 +9,19 @@ import List from "../Components/List/List";
 import { getPlacesData } from "../api";
 import { useContext } from "react";
 import LoginContext from "../Contexts/LoginContext";
+import NavBar from "../Components/NavBar";
 
 const Home = () => {
   const { setLoggedIn } = useContext(LoginContext);
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [places, setPlaces] = useState([]);
   const [coords, setCoords] = useState({});
   const [bounds, setBounds] = useState({});
   const [childClicked, setChildClicked] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [rating, setRating] = useState("");
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -54,24 +57,33 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (bounds) {
+    if (bounds.sw && bounds.ne) {
       setIsLoading(true);
 
       getPlacesData(bounds?.ne, bounds?.sw).then((data) => {
-        setPlaces(data);
+        setPlaces(data?.filter((place) => place.name && place.num_reviews > 0));
+        setFilteredPlaces([]);
         setIsLoading(false);
       });
     }
-  }, [coords, bounds]);
+  }, [ bounds]);
+
+  useEffect(() => {
+    const filteredPlaces = places.filter((place) => place.rating > rating);
+    setFilteredPlaces(filteredPlaces);
+  }, [rating]);
 
   return (
-    <>
+    <div>
+      <NavBar setCoords={setCoords} />
       <Grid container style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
           <List
-            places={places}
+            places={filteredPlaces.length ? filteredPlaces : places}
             childClicked={childClicked}
             isLoading={isLoading}
+            rating={rating}
+            setRating={setRating}
           />
         </Grid>
         <Grid item xs={12} md={8}>
@@ -79,13 +91,13 @@ const Home = () => {
             setCoords={setCoords}
             setBounds={setBounds}
             coords={coords}
-            places={places}
+            places={filteredPlaces.length ? filteredPlaces : places}
             setChildClicked={setChildClicked}
           />
         </Grid>
       </Grid>
       <ToastContainer />
-    </>
+    </div>
   );
 };
 export default Home;
