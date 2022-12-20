@@ -15,8 +15,10 @@ const Home = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [places, setPlaces] = useState([]);
-  const [coordinates, setCoordinates] = useState({});
-  const [bounds, setBounds] = useState(null);
+  const [coords, setCoords] = useState({});
+  const [bounds, setBounds] = useState({});
+  const [childClicked, setChildClicked] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -33,12 +35,11 @@ const Home = () => {
         if (!data.status) {
           removeCookie("jwt");
           navigate("/login");
-        } else
-        setLoggedIn(true)
-          toast.success(`Hi ${data.user} 🦄`, {
-            theme: "dark",
-            toastId: "success1",
-          });
+        } else setLoggedIn(true);
+        toast.success(`Hi ${data.user} 🦄`, {
+          theme: "dark",
+          toastId: "success1",
+        });
       }
     };
     verifyUser();
@@ -47,28 +48,39 @@ const Home = () => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
-        setCoordinates({ lat: latitude, lng: longitude });
+        setCoords({ lat: latitude, lng: longitude });
       }
     );
   }, []);
 
   useEffect(() => {
-    getPlacesData(bounds?.ne, bounds?.sw).then((data) => {
-      setPlaces(data);
-    });
-  }, [coordinates, bounds]);
+    if (bounds) {
+      setIsLoading(true);
+
+      getPlacesData(bounds?.ne, bounds?.sw).then((data) => {
+        setPlaces(data);
+        setIsLoading(false);
+      });
+    }
+  }, [coords, bounds]);
 
   return (
     <>
       <Grid container style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
-          <List places={places} />
+          <List
+            places={places}
+            childClicked={childClicked}
+            isLoading={isLoading}
+          />
         </Grid>
         <Grid item xs={12} md={8}>
           <Map
-            setCoordinates={setCoordinates}
+            setCoords={setCoords}
             setBounds={setBounds}
-            coordinates={coordinates}
+            coords={coords}
+            places={places}
+            setChildClicked={setChildClicked}
           />
         </Grid>
       </Grid>

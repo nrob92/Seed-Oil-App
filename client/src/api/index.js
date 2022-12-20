@@ -13,7 +13,7 @@ export const getPlacesData = async (sw, ne) => {
         tr_latitude: ne.lat,
         bl_longitude: sw.lng,
         tr_longitude: ne.lng,
-        limit: "10",
+        limit: "5",
       },
       headers: {
         "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
