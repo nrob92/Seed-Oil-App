@@ -14,13 +14,18 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import Rating from "@mui/material/Rating";
 import "../PlaceDetails/placeDetailsStyle.css";
 
-const PlaceDetails = ({ place,selected,refProp }) => {
 
 
- if (selected) refProp?.current?.scrollIntoView({behavior:"smooth",block:"start"})
- 
+
+const PlaceDetails = ({ place, selected, refProp }) => {
+  
+  if (selected)
+    refProp?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   return (
-    <Card ref={refProp} sx={{margin:1}} elevation={6}>
+    <Card  ref={refProp} sx={{ margin: 1 }} elevation={6}>
+     
+      
       <CardMedia
         style={{ height: 250 }}
         title={place.name}
@@ -41,8 +46,14 @@ const PlaceDetails = ({ place,selected,refProp }) => {
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <Rating value={Number(place.rating)} precision={0.5} readOnly></Rating>
-          <Typography gutterBottom variant="subtitle1"> out of
+          <Rating
+            value={Number(place.rating)}
+            precision={0.5}
+            readOnly
+          ></Rating>
+          <Typography gutterBottom variant="subtitle1">
+            {" "}
+            out of
             {place.num_reviews} reviews
           </Typography>
         </Box>

@@ -1,33 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import GoogleMapReact from "google-map-react";
-import { useLoadScript } from "@react-google-maps/api";
+//import { useLoadScript } from "@react-google-maps/api";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import "../Map/mapStyles.css";
 import Rating from "@mui/material/Rating";
-import mapStyles from "./mapStyles"
+import mapStyles from "./mapStyles";
+import AppContext from "../../Contexts/AppContext";
+import { useContext } from "react";
+import Modal from "../Modal/Modal";
+import Box from "@mui/material/Box";
 
-const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
+const Map = ({ places }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const [modal, setModal] = useState([]);
+  const { setCoords, coords, setBounds, setChildClicked } =
+    useContext(AppContext);
   const isDesktop = window.matchMedia("(max-width: 600px)");
   // const { isLoaded } = useLoadScript({
   //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   // });
   // if (!isLoaded) return <div>Loaing...</div>;
 
+  const filterName = (name) => {
+    setModal([name]);
+    setOpen(true);
+  };
+
   return (
     <div
       style={{
         height: "90vh",
-        width: "100%",
+
         padding: "25px",
       }}
     >
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
         center={coords}
-        defaultCenter={coords}
         defaultZoom={14}
-        options={{ disableDefaultUI: true, zoomControl: true, styles: mapStyles}}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          styles: mapStyles,
+        }}
         onChange={(e) => {
           setCoords({ lat: e.center.lat, lng: e.center.lng });
           setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
@@ -38,6 +55,7 @@ const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
       >
         {places?.map((place, i) => (
           <div
+            onClick={() => filterName(place)}
             className="markerContainer"
             lat={Number(place.latitude)}
             lng={Number(place.longitude)}
@@ -73,6 +91,18 @@ const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
             )}
           </div>
         ))}
+
+        {open && (
+          <>
+            {modal.map((restaurant, i) => {
+              return (
+                <Box key={i} className="modal">
+                  <Modal setOpen={setOpen} restaurant={restaurant} />
+                </Box>
+              );
+            })}
+          </>
+        )}
       </GoogleMapReact>
     </div>
   );

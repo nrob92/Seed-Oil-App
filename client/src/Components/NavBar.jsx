@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
-import { LoginContext } from "../Contexts/LoginContext";
+import { AppContext } from "../Contexts/AppContext";
 import { Autocomplete } from "@react-google-maps/api";
 import { useState } from "react";
 
@@ -59,8 +59,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function NavBar({ setCoords }) {
-  const { loggedIn, setLoggedIn } = useContext(LoginContext);
+export default function NavBar() {
+  const { loggedIn, setLoggedIn ,setCoords} = useContext(AppContext);
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [autocomplete, setAutocomplete] = useState(null);
@@ -78,6 +78,7 @@ export default function NavBar({ setCoords }) {
     const lng = autocomplete.getPlace().geometry.location.lng();
     setCoords({ lat, lng });
   };
+ 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -107,7 +108,7 @@ export default function NavBar({ setCoords }) {
               </SearchIconWrapper>
               <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
                 <StyledInputBase
-                  placeholder="Search…"
+                  placeholder="Location…"
                   inputProps={{ "aria-label": "search" }}
                 />
               </Autocomplete>

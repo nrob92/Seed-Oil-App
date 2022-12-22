@@ -3,10 +3,10 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
-import { LoginContext } from "../Contexts/LoginContext";
+import { AppContext } from "../Contexts/AppContext";
 
 const Register = () => {
-  const { setLoggedIn } = useContext(LoginContext);
+  const { setLoggedIn } = useContext(AppContext);
   const [values, setValues] = useState({ email: "", password: "" });
   const [cookies] = useCookies(["cookie-name"]);
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const Register = () => {
       navigate("/");
     }
   }, [cookies, navigate]);
+  
 
   const generateError = (error) =>
     toast.error(error, {

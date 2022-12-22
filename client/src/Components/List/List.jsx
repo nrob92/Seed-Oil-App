@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from "react";
+import React, { useState, useEffect, createRef, useContext } from "react";
 import Box from "@mui/material/Box";
 import "../List/listStyle.css";
 import {
@@ -11,20 +11,27 @@ import {
   Select,
 } from "@mui/material";
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
+import AppContext from "../../Contexts/AppContext";
 
-const List = ({ places, childClicked, isLoading, rating,setRating }) => {
- 
+const List = ({places}) => {
   const [elRefs, setElRefs] = useState([]);
+  const {
+    childClicked,
+    isLoading,
+    rating,
+    setRating,
+    setSearch,
+    search,
+  } = useContext(AppContext);
+
 
   useEffect(() => {
     setElRefs((refs) =>
-      Array(places?.length)
+      Array(places?.length) 
         .fill()
         .map((_, i) => refs[i] || createRef())
     );
   }, [places]);
-
-
 
   return (
     <Box>
@@ -49,19 +56,22 @@ const List = ({ places, childClicked, isLoading, rating,setRating }) => {
               <MenuItem value={4}>Above 4.0</MenuItem>
               <MenuItem value={4.5}>Above 4.5</MenuItem>
             </Select>
+            <input
+              type="text"
+              value={search}
+              placeholder="search name"
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </FormControl>
           <Grid container spacing={3} className="list">
             {places?.map((place, i) => (
-              <>
-              
-                <Grid item key={i} xs={12}>
-                  <PlaceDetails
-                    place={place}
-                    selected={Number(childClicked) === i}
-                    refProp={elRefs[i]}
-                  />
-                </Grid>
-              </>
+              <Grid item key={i} xs={12}>
+                <PlaceDetails
+                  place={place}
+                  selected={Number(childClicked) === i}
+                  refProp={elRefs[i]}
+                />
+              </Grid>
             ))}
           </Grid>
         </>
