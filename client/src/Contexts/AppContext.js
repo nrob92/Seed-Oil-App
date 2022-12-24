@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 
+
 export const AppContext = createContext(null);
 
 export const AppContextProvider = ({ children }) => {
@@ -13,6 +14,10 @@ export const AppContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState("");
   const [search, setSearch] = useState("");
+  const [seedOilData, setSeedOilData] = useState([]);
+
+
+
 
   const value = {
     loggedIn,
@@ -33,8 +38,12 @@ export const AppContextProvider = ({ children }) => {
     setRating,
     search,
     setSearch,
+    setSeedOilData,
+    seedOilData
+    
   };
 
+ 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 

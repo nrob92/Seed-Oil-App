@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -14,7 +14,6 @@ const Home = () => {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const {
     setLoggedIn,
-    setCoords,
     filteredPlaces,
     setFilteredPlaces,
     places,
@@ -52,16 +51,10 @@ const Home = () => {
     verifyUser();
   }, [cookies, navigate, removeCookie]);
 
-  //gets your current location
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
-        setCoords({ lat: latitude, lng: longitude });
-      }
-    );
-  }, []);
 
-  // runs api call everytime map scales or changes
+  
+
+  // runs api call everytime map scales or changes 
   useEffect(() => {
     if (bounds.sw && bounds.ne) {
       setIsLoading(true);
@@ -74,7 +67,8 @@ const Home = () => {
     }
   }, [bounds]);
 
-  // filter data from api depending on your search and rating
+
+  // filter data from api depending on your search
   useEffect(() => {
     const filteredPlaces = places.filter(
       (place) => place.rating > rating && place.name.includes(search)

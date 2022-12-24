@@ -10,18 +10,40 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import axios from "axios";
+import AppContext from "../../Contexts/AppContext";
 
 export default function Modal({ restaurant, setOpen }) {
   const [openModalRating, setOpenModalRating] = React.useState(false);
   const [rating, setRating] = React.useState(0);
-  const [values, setValues] = React.useState({
-    select: "",
-    input: "",
-  });
+  const [select, setSelect] = React.useState("");
+  const [input, setInput] = React.useState("");
+  const { setSeedOilData, seedOilData } = React.useContext(AppContext);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log({ values });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    postSeedOilData(input, select, rating);
+  };
+
+  const postSeedOilData = async (input, select, rating) => {
+    let response = await axios.post(`${process.env.REACT_APP_LOCAL_HOST}post`, {
+      select,
+      input,
+      rating,
+      name: restaurant.name,
+      latitude: restaurant.latitude,
+      longitude: restaurant.longitude,
+      photo: restaurant.photo ? restaurant.photo.images.large.url : "",
+    });
+
+    setSeedOilData([response.data, ...seedOilData]);
+    setOpen(false);
+    setInput("");
+    setSelect("");
+  };
+
+  const toggleModals = () => {
+    setOpenModalRating(!openModalRating);
   };
 
   return (
@@ -68,17 +90,14 @@ export default function Modal({ restaurant, setOpen }) {
             justifyContent="space-evenly"
             spacing={2}
           >
-            <Button
-              onClick={() => setOpenModalRating(!openModalRating)}
-              variant="contained"
-            >
+            <Button onClick={toggleModals} variant="contained">
               File Report
             </Button>
             <Button variant="contained">{restaurant.phone}</Button>
           </Stack>
         </Card>
       ) : (
-        <FormControl onSubmit={(e) => handleSubmit(e)} action="">
+        <form onSubmit={handleSubmit}>
           <Card elevation={10} sx={{ maxWidth: 345, p: 3 }}>
             <CardHeader
               action={
@@ -114,12 +133,10 @@ export default function Modal({ restaurant, setOpen }) {
                 fullWidth
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={values.select}
                 label="Select Source"
+                value={select}
                 name="select"
-                onChange={(e) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+                onChange={(e) => setSelect(e.target.value)}
               >
                 <MenuItem value={"Visible Kitchen"}>Visible Kitchen</MenuItem>
                 <MenuItem value={"Kitchen Confirmed"}>
@@ -141,9 +158,8 @@ export default function Modal({ restaurant, setOpen }) {
                 label="Source Body"
                 variant="outlined"
                 name="input"
-                onChange={(e) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
               />
 
               <Button type="submit" variant="contained">
@@ -151,7 +167,7 @@ export default function Modal({ restaurant, setOpen }) {
               </Button>
             </Stack>
           </Card>
-        </FormControl>
+        </form>
       )}
     </div>
   );
