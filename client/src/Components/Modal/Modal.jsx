@@ -12,6 +12,20 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import AppContext from "../../Contexts/AppContext";
+import ImageIcon from "@mui/icons-material/Image";
+
+const convertToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
 
 export default function Modal({ restaurant, setOpen }) {
   const [openModalRating, setOpenModalRating] = React.useState(false);
@@ -19,13 +33,15 @@ export default function Modal({ restaurant, setOpen }) {
   const [select, setSelect] = React.useState("");
   const [input, setInput] = React.useState("");
   const { setSeedOilData, seedOilData } = React.useContext(AppContext);
+  const [imgFile, setImgFile] = React.useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postSeedOilData(input, select, rating);
+    postSeedOilData(input, select, rating,imgFile);
+    console.log("uploaded");
   };
 
-  const postSeedOilData = async (input, select, rating) => {
+  const postSeedOilData = async (input, select, rating,imgFile) => {
     let response = await axios.post(`${process.env.REACT_APP_LOCAL_HOST}post`, {
       select,
       input,
@@ -34,16 +50,25 @@ export default function Modal({ restaurant, setOpen }) {
       latitude: restaurant.latitude,
       longitude: restaurant.longitude,
       photo: restaurant.photo ? restaurant.photo.images.large.url : "",
+      imgFile
     });
 
     setSeedOilData([response.data, ...seedOilData]);
-    setOpen(false);
     setInput("");
     setSelect("");
+    setImgFile("")
+    setOpen(false);
   };
 
   const toggleModals = () => {
     setOpenModalRating(!openModalRating);
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    const base64 = await convertToBase64(file);
+    setImgFile(base64);
   };
 
   return (
@@ -161,11 +186,25 @@ export default function Modal({ restaurant, setOpen }) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
               />
-
-              <Button type="submit" variant="contained">
-                Submit
-              </Button>
             </Stack>
+            <label
+              htmlFor="file-upload"
+              id="demo-simple-select-label"
+              className="custom-file-upload"
+            >
+              <ImageIcon />
+            </label>
+            <input
+              type="file"
+              label="Image"
+              variant="outlined"
+              name="myFile"
+              accept=".jpeg, .png, .jpg"
+              onChange={(e) => handleFileUpload(e)}
+            />
+            <Button type="submit" variant="contained">
+              Submit
+            </Button>
           </Card>
         </form>
       )}

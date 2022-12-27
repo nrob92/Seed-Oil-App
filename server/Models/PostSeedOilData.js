@@ -23,6 +23,9 @@ const postSeedOilData = new Schema({
   photo: {
     type: String,
   },
+  imgFile: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("SeedOilData", postSeedOilData);

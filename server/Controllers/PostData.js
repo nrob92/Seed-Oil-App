@@ -2,7 +2,7 @@ const SeedOilData = require("../Models/PostSeedOilData");
 
 module.exports.postSeedOilData = async (req, res) => {
   try {
-    const { select, input, rating, name, latitude, longitude, photo } =
+    const { select, input, rating, name, latitude, longitude, photo,imgFile } =
       req.body;
     const seedOilData = await SeedOilData.create({
       select,
@@ -12,6 +12,7 @@ module.exports.postSeedOilData = async (req, res) => {
       latitude,
       longitude,
       photo,
+      imgFile
     });
 
     res.status(200).json(seedOilData);

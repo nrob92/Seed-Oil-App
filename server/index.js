@@ -5,6 +5,7 @@ const cors = require("cors");
 const authRoutes = require("./Routes/AuthRoutes");
 const cookieParser = require("cookie-parser");
 mongoose.set('strictQuery', true);
+var bodyParser = require('body-parser')
 require('dotenv').config();
 
 const port = process.env.REACT_APP_MONGO_CONNECTION;
@@ -35,7 +36,8 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser());
 
 app.use(express.json());
