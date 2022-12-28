@@ -39,7 +39,7 @@ const Map = ({ places }) => {
     <div
       style={{
         height: "90vh",
-        padding: "25px",
+        padding: "26px",
       }}
     >
       <GoogleMapReact

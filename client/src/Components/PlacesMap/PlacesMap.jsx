@@ -23,15 +23,17 @@ const PlacesMap = ({ place }) => {
             <Typography className="typography" variant="subtitle2" gutterBottom>
               {place.name}
             </Typography>
-            <img
-              src={
-                place
-                  ? place.photo.images.large.url
-                  : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
-              }
-              alt={place.name}
-              className="pointer"
-            />
+       
+              <img
+                src={
+                  place.photo
+                    ? place.photo.images.large.url
+                    : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
+                }
+                alt={place.name}
+                className="pointer"
+              />
+            
             <Rating
               size="small"
               precision={0.5}
@@ -44,10 +46,10 @@ const PlacesMap = ({ place }) => {
 
       {open && (
         <>
-          {modal.map((restaurant, i) => {
+          {modal.map((place, i) => {
             return (
               <Box key={i} className="modal">
-                <Modal setOpen={setOpen} restaurant={restaurant} />
+                <Modal setOpen={setOpen} place={place} />
               </Box>
             );
           })}

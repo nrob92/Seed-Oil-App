@@ -6,7 +6,6 @@ import { toast, ToastContainer } from "react-toastify";
 import Map from "../Components/Map/Map";
 import { Grid } from "@mui/material";
 import List from "../Components/List/List";
-import { getPlacesData } from "../api";
 import { AppContext } from "../Contexts/AppContext";
 
 const Home = () => {
@@ -17,12 +16,8 @@ const Home = () => {
     filteredPlaces,
     setFilteredPlaces,
     places,
-    setPlaces,
-    bounds,
-    setIsLoading,
     rating,
     search,
-    setSearch,
   } = useContext(AppContext);
 
   // checks to see if youre logged in
@@ -51,22 +46,7 @@ const Home = () => {
     verifyUser();
   }, [cookies, navigate, removeCookie]);
 
-
   
-
-  // runs api call everytime map scales or changes 
-  useEffect(() => {
-    if (bounds.sw && bounds.ne) {
-      setIsLoading(true);
-      getPlacesData(bounds?.ne, bounds?.sw).then((data) => {
-        setPlaces(data?.filter((place) => place.num_reviews > 0));
-        setFilteredPlaces([]);
-        setSearch("");
-        setIsLoading(false);
-      });
-    }
-  }, [bounds]);
-
 
   // filter data from api depending on your search
   useEffect(() => {

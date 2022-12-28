@@ -1,12 +1,15 @@
-import * as React from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Alert from "@mui/material/Alert";
 
-export default function SeedOilModal({ place, setSeedOilModal }) {
+const MainModal = ({ place, setOpen, openModalRating, setOpenModalRating }) => {
+  const toggleModals = () => {
+    setOpenModalRating(!openModalRating);
+  };
   return (
     <div>
       <Card sx={{ maxWidth: 345, p: 3 }}>
@@ -15,7 +18,7 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
             <Button
               variant="contained"
               size="small"
-              onClick={() => setSeedOilModal(false)}
+              onClick={() => setOpen(false)}
             >
               X CLOSE
             </Button>
@@ -29,8 +32,16 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
           value={Number(place.rating)}
           readOnly
         ></Rating>
-
-        <CardMedia component="img" height="194" src={place.imgFile} />
+        <CardMedia
+          component="img"
+          height="194"
+          image={
+            place.photo
+              ? place.photo.images.large.url
+              : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
+          }
+          alt={place.name}
+        />
 
         <Alert sx={{ p: 0, mt: 1 }} severity="error">
           Assume the worst
@@ -42,11 +53,14 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
           justifyContent="space-evenly"
           spacing={2}
         >
-          {" "}
-          <Typography>{place.input}</Typography>
-          <Typography>{place.select}</Typography>
+          <Button onClick={toggleModals} variant="contained">
+            File Report
+          </Button>
+          <Button variant="contained">{place.phone}</Button>
         </Stack>
       </Card>
     </div>
   );
-}
+};
+
+export default MainModal;

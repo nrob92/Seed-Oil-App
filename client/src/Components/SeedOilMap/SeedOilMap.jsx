@@ -44,10 +44,10 @@ const SeedOilMap = ({ place }) => {
       </div>
       {seedOilModal && (
         <>
-          {modal.map((restaurant, i) => {
+          {modal.map((place, i) => {
             return (
               <Box key={i} className="modal">
-                <SeedOilModal setSeedOilModal={setSeedOilModal}  restaurant={restaurant} />
+                <SeedOilModal setSeedOilModal={setSeedOilModal}  place={place} />
               </Box>
             );
           })}
