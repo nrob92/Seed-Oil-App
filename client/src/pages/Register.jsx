@@ -7,7 +7,7 @@ import { AppContext } from "../Contexts/AppContext";
 
 const Register = () => {
   const { setLoggedIn } = useContext(AppContext);
-  const [values, setValues] = useState({ email: "", password: "" });
+  const [values, setValues] = useState({ email: "", password: "",username:"" });
   const [cookies] = useCookies(["cookie-name"]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -58,6 +58,17 @@ const Register = () => {
               type="email"
               name="email"
               placeholder="Email"
+              onChange={(e) =>
+                setValues({ ...values, [e.target.name]: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="username">Username</label>
+            <input
+              type="username"
+              placeholder="Username"
+              name="username"
               onChange={(e) =>
                 setValues({ ...values, [e.target.name]: e.target.value })
               }

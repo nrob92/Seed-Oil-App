@@ -6,8 +6,6 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import AppContext from "../../Contexts/AppContext";
-import ImageIcon from "@mui/icons-material/Image";
-
 import Rating from "@mui/material/Rating";
 import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
@@ -33,9 +31,9 @@ const FormModal = ({ place, setOpen }) => {
   const [input, setInput] = React.useState("");
   const [userData, setUserData] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
-
-  const { setSeedOilData, seedOilData } = React.useContext(AppContext);
   const [imgFile, setImgFile] = React.useState("");
+  const { setSeedOilData, seedOilData } = React.useContext(AppContext);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     postSeedOilData(input, select, rating, imgFile);
@@ -52,6 +50,7 @@ const FormModal = ({ place, setOpen }) => {
       longitude: place.longitude,
       photo: place.photo ? place.photo.images.large.url : "",
       imgFile,
+      user: userData.user,
     });
 
     setSeedOilData([response.data, ...seedOilData]);
@@ -147,8 +146,7 @@ const FormModal = ({ place, setOpen }) => {
             htmlFor="file-upload"
             id="demo-simple-select-label"
             className="custom-file-upload"
-          >
-          </label>
+          ></label>
           <input
             type="file"
             label="Image"

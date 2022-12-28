@@ -45,6 +45,7 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
           {" "}
           <Typography>{place.input}</Typography>
           <Typography>{place.select}</Typography>
+          <Typography>{place.user}</Typography>
         </Stack>
       </Card>
     </div>
