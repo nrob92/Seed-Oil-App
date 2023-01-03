@@ -1,18 +1,28 @@
-const { register, login ,} = require("../Controllers/AuthControllers");
-const { getUser} = require("../Controllers/GetUsers");
+const { register, login } = require("../Controllers/AuthControllers");
+const { getRestaurantData } = require("../Controllers/GetData");
 
-const { postSeedOilData,getSeedOilData} = require ("../Controllers/PostData")
+const { getUser } = require("../Controllers/GetUsers");
+
+const {
+  postSeedOilData,
+  postRestaurantData,
+} = require("../Controllers/PostData");
 const { checkUser } = require("../Middlewares/AuthMiddlewares");
-
 
 const router = require("express").Router();
 
-router.post("/", checkUser);
 router.get("/getUser", getUser);
-router.post("/register", register);
-router.post("/login", login);
-router.post("/post", postSeedOilData);
-router.get("/get", getSeedOilData);
 
+router.get("/getRestaurantData", getRestaurantData);
+
+router.post("/", checkUser);
+
+router.post("/register", register);
+
+router.post("/login", login);
+
+router.post("/postSeedOilData", postSeedOilData);
+
+router.post("/postRestaurantData", postRestaurantData);
 
 module.exports = router;

@@ -1,7 +1,6 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import { Button, Stack, Typography } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Alert from "@mui/material/Alert";
@@ -26,11 +25,25 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
         <Rating
           size="small"
           precision={0.5}
-          value={Number(place.rating)}
+          value={Number(place.userRating)}
           readOnly
         ></Rating>
 
-        <CardMedia component="img" height="194" src={place.imgFile} />
+        <img
+          component="img"
+          style={{ maxWidth: "100%", height: "auto" }}
+          src={place.imgFile}
+        />
+        <img
+          style={{ maxWidth: "100%", height: "auto" }}
+          src={
+            place
+              ? place.photos[4]
+              : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
+          }
+          alt={place.name}
+          className="pointer"
+        />
 
         <Alert sx={{ p: 0, mt: 1 }} severity="error">
           Assume the worst
@@ -45,7 +58,6 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
           {" "}
           <Typography>{place.input}</Typography>
           <Typography>{place.select}</Typography>
-          <Typography>{place.user}</Typography>
         </Stack>
       </Card>
     </div>

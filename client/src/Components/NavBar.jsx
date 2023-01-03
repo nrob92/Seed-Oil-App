@@ -16,6 +16,7 @@ import Stack from "@mui/material/Stack";
 import { AppContext } from "../Contexts/AppContext";
 import { Autocomplete } from "@react-google-maps/api";
 import { useState } from "react";
+import axios from "axios";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,7 +61,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
-  const { loggedIn, setLoggedIn ,setCoords} = useContext(AppContext);
+  const {
+    loggedIn,
+    setLoggedIn,
+    setAllValues,
+    allValues,
+    setRestaurantData,
+    restaurantData,
+    setCoords,
+  } = useContext(AppContext);
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [autocomplete, setAutocomplete] = useState(null);
@@ -73,12 +82,56 @@ export default function NavBar() {
 
   const onLoad = (autoC) => setAutocomplete(autoC);
 
-  const onPlaceChanged = () => {
-    const lat = autocomplete.getPlace().geometry.location.lat();
-    const lng = autocomplete.getPlace().geometry.location.lng();
+  const onPlaceChanged = async () => {
+    const lat = await autocomplete.getPlace().geometry.location.lat();
+    const lng = await autocomplete.getPlace().geometry.location.lng();
+    const photos = await autocomplete.getPlace().photos.map((x) => x.getUrl());
+    const name = await autocomplete.getPlace().name;
+    const rating = await autocomplete.getPlace().rating;
+    const website = await autocomplete.getPlace().website;
+    const address = await autocomplete.getPlace().formatted_address;
+    const phone = await autocomplete.getPlace().formatted_phone_number;
+    const id = await autocomplete.getPlace().place_id;
     setCoords({ lat, lng });
+    setAllValues({
+      lat,
+      lng,
+      photos,
+      name,
+      rating,
+      website,
+      address,
+      phone,
+      id,
+    });
   };
- 
+
+  React.useEffect(() => {
+    const sendData = async () => {
+      if (allValues?.name?.length > 3) {
+        try {
+          let response = await axios.post(
+            `${process.env.REACT_APP_LOCAL_HOST}postRestaurantData`,
+            {
+              lat: allValues.lat,
+              lng: allValues.lng,
+              photos: allValues.photos,
+              name: allValues.name,
+              rating: allValues.rating,
+              website: allValues.website,
+              address: allValues.address,
+              phone: allValues.phone,
+              id: allValues.id,
+            }
+          );
+          setRestaurantData([response.data, ...restaurantData]);
+        } catch (ex) {
+          console.log(ex);
+        }
+      }
+    };
+    sendData();
+  }, [allValues]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -106,6 +159,7 @@ export default function NavBar() {
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
+
               <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
                 <StyledInputBase
                   placeholder="Location…"

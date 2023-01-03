@@ -13,21 +13,14 @@ import {
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 import AppContext from "../../Contexts/AppContext";
 
-const List = ({places}) => {
+const List = ({ places }) => {
   const [elRefs, setElRefs] = useState([]);
-  const {
-    childClicked,
-    isLoading,
-    rating,
-    setRating,
-    setSearch,
-    search,
-  } = useContext(AppContext);
-
+  const { childClicked, isLoading, rating, setRating, setSearch, search } =
+    useContext(AppContext);
 
   useEffect(() => {
     setElRefs((refs) =>
-      Array(places?.length) 
+      Array(places?.length)
         .fill()
         .map((_, i) => refs[i] || createRef())
     );

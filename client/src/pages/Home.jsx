@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -15,9 +15,9 @@ const Home = () => {
     setLoggedIn,
     filteredPlaces,
     setFilteredPlaces,
-    places,
     rating,
     search,
+    restaurantData,
   } = useContext(AppContext);
 
   // checks to see if youre logged in
@@ -46,11 +46,9 @@ const Home = () => {
     verifyUser();
   }, [cookies, navigate, removeCookie]);
 
-  
-
   // filter data from api depending on your search
   useEffect(() => {
-    const filteredPlaces = places.filter(
+    const filteredPlaces = restaurantData.filter(
       (place) => place.rating > rating && place.name.includes(search)
     );
     setFilteredPlaces(filteredPlaces);
@@ -60,10 +58,14 @@ const Home = () => {
     <div>
       <Grid container style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
-          <List places={filteredPlaces.length ? filteredPlaces : places} />
+          <List
+            places={filteredPlaces.length ? filteredPlaces : restaurantData}
+          />
         </Grid>
         <Grid item xs={12} md={8}>
-          <Map places={filteredPlaces.length ? filteredPlaces : places} />
+          <Map
+            places={filteredPlaces.length ? filteredPlaces : restaurantData}
+          />
         </Grid>
       </Grid>
       <ToastContainer />

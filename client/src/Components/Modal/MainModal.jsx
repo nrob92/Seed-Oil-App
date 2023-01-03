@@ -1,7 +1,6 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import { Button, Stack } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Alert from "@mui/material/Alert";
@@ -32,12 +31,12 @@ const MainModal = ({ place, setOpen, openModalRating, setOpenModalRating }) => {
           value={Number(place.rating)}
           readOnly
         ></Rating>
-        <CardMedia
+        <img
           component="img"
-          height="194"
-          image={
-            place.photo
-              ? place.photo.images.large.url
+          style={{ maxWidth: "100%", height: "auto" }}
+          src={
+            place.photos
+              ? place.photos[4]
               : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
           }
           alt={place.name}

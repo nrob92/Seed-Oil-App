@@ -4,34 +4,26 @@ import {
   Typography,
   Button,
   Card,
-  CardMedia,
   CardContent,
   CardActions,
-  Chip,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import Rating from "@mui/material/Rating";
 import "../PlaceDetails/placeDetailsStyle.css";
 
-
-
-
 const PlaceDetails = ({ place, selected, refProp }) => {
-  
   if (selected)
     refProp?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
-    <Card  ref={refProp} sx={{ margin: 1 }} elevation={6}>
-     
-      
-      <CardMedia
-        style={{ height: 250 }}
+    <Card ref={refProp} sx={{ margin: 1 }} elevation={6}>
+      <img
+        style={{ backgroundSize: "cover", width: "100%" }}
         title={place.name}
-        image={
-          place.photo
-            ? place.photo.images.large.url
+        src={
+          place.photos
+            ? place.photos
             : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
         }
       />
@@ -41,9 +33,6 @@ const PlaceDetails = ({ place, selected, refProp }) => {
         </Typography>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="subtitle1">Price</Typography>
-          <Typography gutterBottom variant="subtitle1">
-            {place.price_level}
-          </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Rating
@@ -51,21 +40,11 @@ const PlaceDetails = ({ place, selected, refProp }) => {
             precision={0.5}
             readOnly
           ></Rating>
-          <Typography gutterBottom variant="subtitle1">
-            {" "}
-            out of
-            {place.num_reviews} reviews
-          </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="subtitle1">Ranking</Typography>
-          <Typography gutterBottom variant="subtitle1">
-            {place.ranking}
-          </Typography>
         </Box>
-        {place?.cuisine?.map(({ name }) => (
-          <Chip key={name} size="small" label={name} className="chip" />
-        ))}
+
         {place?.address && (
           <Typography
             gutterBottom
@@ -87,13 +66,6 @@ const PlaceDetails = ({ place, selected, refProp }) => {
           </Typography>
         )}
         <CardActions>
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => window.open(place.web_url, "_blank")}
-          >
-            Trip Advisor
-          </Button>
           <Button
             size="small"
             color="primary"

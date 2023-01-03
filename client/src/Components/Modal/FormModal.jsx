@@ -26,40 +26,41 @@ const convertToBase64 = (file) => {
 };
 
 const FormModal = ({ place, setOpen }) => {
-  const [rating, setRating] = React.useState(0);
+  const [userRating, setUserRating] = React.useState(0);
   const [select, setSelect] = React.useState("");
   const [input, setInput] = React.useState("");
   const [userData, setUserData] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
   const [imgFile, setImgFile] = React.useState("");
-  const { setSeedOilData, seedOilData } = React.useContext(AppContext);
+  const { setSeedOilData, seedOilData, restaurantData } =
+    React.useContext(AppContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postSeedOilData(input, select, rating, imgFile);
+    postSeedOilData(input, select, userRating, imgFile);
     console.log("uploaded");
   };
 
-  const postSeedOilData = async (input, select, rating, imgFile) => {
-    let response = await axios.post(`${process.env.REACT_APP_LOCAL_HOST}post`, {
-      select,
-      input,
-      rating,
-      name: place.name,
-      latitude: place.latitude,
-      longitude: place.longitude,
-      photo: place.photo ? place.photo.images.large.url : "",
-      imgFile,
-      user: userData.user,
-    });
+  const postSeedOilData = async (input, select, userRating, imgFile) => {
+    let response = await axios.post(
+      `${process.env.REACT_APP_LOCAL_HOST}postSeedOilData`,
+      {
+        select,
+        input,
+        userRating,
+        imgFile,
+        user: userData.user,
+        id: place._id,
+      }
+    );
 
-    setSeedOilData([response.data, ...seedOilData]);
+    setSeedOilData([response.data, ...restaurantData]);
     setInput("");
     setSelect("");
     setImgFile("");
     setOpen(false);
   };
-
+  console.log(seedOilData);
   const getUserData = async () => {
     let response = await axios.get(
       `${process.env.REACT_APP_LOCAL_HOST}getUser`,
@@ -70,13 +71,54 @@ const FormModal = ({ place, setOpen }) => {
     setUserData(response.data);
     setChecked(true);
   };
-  console.log(userData);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     console.log(file);
     const base64 = await convertToBase64(file);
     setImgFile(base64);
+  };
+
+  const AlertComponent = () => {
+    if (userRating <= 1) {
+      return (
+        <Alert sx={{ flexDirection: "row" }} severity="error">
+          terrible
+        </Alert>
+      );
+    }
+    if (userRating <= 2.5) {
+      return (
+        <Alert sx={{ flexDirection: "row" }} severity="warning">
+          bad
+        </Alert>
+      );
+    }
+    if (userRating <= 3.5) {
+      return (
+        <Alert sx={{ flexDirection: "row" }} severity="info">
+          ok
+        </Alert>
+      );
+    }
+    if (userRating <= 4) {
+      return (
+        <Alert sx={{ flexDirection: "row" }} severity="success">
+          good
+        </Alert>
+      );
+    }
+    if (userRating > 4) {
+      return (
+        <Alert
+          sx={{ flexDirection: "row" }}
+          variant="filled"
+          severity="success"
+        >
+          Best!!!
+        </Alert>
+      );
+    }
   };
 
   return (
@@ -98,15 +140,13 @@ const FormModal = ({ place, setOpen }) => {
 
           <Rating
             name="simple-controlled"
-            value={rating}
+            value={userRating}
             onChange={(event, newValue) => {
-              setRating(newValue);
+              setUserRating(newValue);
             }}
           />
 
-          <Alert sx={{ p: 0, mt: 1 }} severity="error">
-            Assume the worst
-          </Alert>
+          <AlertComponent />
 
           <Divider sx={{ borderBottomWidth: "3px", mt: 2 }} />
           <FormControl sx={{ mt: 2 }} fullWidth>

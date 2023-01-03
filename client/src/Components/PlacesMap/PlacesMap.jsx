@@ -3,6 +3,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Paper, Typography, Box } from "@mui/material";
 import Modal from "../Modal/Modal";
 import Rating from "@mui/material/Rating";
+import SeedOilMap from "../SeedOilMap/SeedOilMap";
 
 const PlacesMap = ({ place }) => {
   const isDesktop = window.matchMedia("(max-width: 600px)");
@@ -15,34 +16,50 @@ const PlacesMap = ({ place }) => {
 
   return (
     <div>
-      <div onClick={() => filterName(place)} className="markerContainer">
-        {isDesktop.matches ? (
-          <LocationOnIcon color="primary" fontSize="large" />
-        ) : (
-          <Paper elevation={3} className="paper">
-            <Typography className="typography" variant="subtitle2" gutterBottom>
-              {place.name}
-            </Typography>
-       
+      {!place.userRating ? (
+        <div onClick={() => filterName(place)} className="markerContainer">
+          {isDesktop.matches ? (
+            <LocationOnIcon color="primary" fontSize="large" />
+          ) : (
+            <Paper elevation={3} className="paper">
+              <Typography
+                textAlign="center"
+                fontSize={12}
+                variant="subtitle2"
+                gutterBottom
+              >
+                {place.name}
+              </Typography>
+              <Typography
+                textAlign="center"
+                fontSize={12}
+                variant="subtitle2"
+                gutterBottom
+              ></Typography>
+
               <img
+                style={{ maxWidth: "100%", height: "auto" }}
                 src={
-                  place.photo
-                    ? place.photo.images.large.url
+                  place.photos
+                    ? place.photos[4]
                     : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
                 }
                 alt={place.name}
                 className="pointer"
               />
-            
-            <Rating
-              size="small"
-              precision={0.5}
-              value={Number(place.rating)}
-              readOnly
-            ></Rating>
-          </Paper>
-        )}
-      </div>
+
+              <Rating
+                size="small"
+                precision={0.5}
+                value={Number(place.rating)}
+                readOnly
+              ></Rating>
+            </Paper>
+          )}
+        </div>
+      ) : (
+        <SeedOilMap place={place} />
+      )}
 
       {open && (
         <>

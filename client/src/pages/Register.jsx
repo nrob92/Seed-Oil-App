@@ -7,7 +7,11 @@ import { AppContext } from "../Contexts/AppContext";
 
 const Register = () => {
   const { setLoggedIn } = useContext(AppContext);
-  const [values, setValues] = useState({ email: "", password: "",username:"" });
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+    username: "",
+  });
   const [cookies] = useCookies(["cookie-name"]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -15,7 +19,6 @@ const Register = () => {
       navigate("/");
     }
   }, [cookies, navigate]);
-  
 
   const generateError = (error) =>
     toast.error(error, {
