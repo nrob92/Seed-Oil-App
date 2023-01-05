@@ -1,4 +1,3 @@
-const SeedOilData = require("../Models/PostSeedOilData");
 const RestaurantData = require("../Models/PostRestaurantData");
 
 module.exports.postSeedOilData = async (req, res) => {

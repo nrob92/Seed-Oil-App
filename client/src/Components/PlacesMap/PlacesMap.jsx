@@ -16,7 +16,9 @@ const PlacesMap = ({ place }) => {
 
   return (
     <div>
-      {!place.userRating ? (
+      {place.userRating ? (
+        <SeedOilMap place={place} />
+      ) : (
         <div onClick={() => filterName(place)} className="markerContainer">
           {isDesktop.matches ? (
             <LocationOnIcon color="primary" fontSize="large" />
@@ -57,8 +59,6 @@ const PlacesMap = ({ place }) => {
             </Paper>
           )}
         </div>
-      ) : (
-        <SeedOilMap place={place} />
       )}
 
       {open && (
