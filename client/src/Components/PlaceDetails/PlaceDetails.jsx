@@ -23,7 +23,7 @@ const PlaceDetails = ({ place, selected, refProp }) => {
         title={place.name}
         src={
           place.photos
-            ? place.photos
+            ? place.photos[0]
             : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
         }
       />

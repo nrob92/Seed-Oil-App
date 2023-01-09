@@ -11,8 +11,7 @@ const MainModal = ({ place, setOpen, openModalRating, setOpenModalRating }) => {
   const toggleModals = () => {
     setOpenModalRating(!openModalRating);
   };
-  const firstFour = place.photos.slice(0, 5);
-
+  const imgSlice = place.photos.slice(0, 4);
   return (
     <div>
       <Card sx={{ p: 3 }}>
@@ -36,10 +35,17 @@ const MainModal = ({ place, setOpen, openModalRating, setOpenModalRating }) => {
           readOnly
         ></Rating>
         <Box>
-          <ImageList variant="masonry" cols={5} gap={8}>
-            {firstFour.map((item) => (
+          <ImageList variant="masonry" cols={4} gap={8}>
+            {imgSlice.map((item) => (
               <ImageListItem key={item.img}>
                 <img
+                  style={{
+                    width: "100%",
+                    maxWidth: "200px",
+                    height: "200px",
+                    objectFit: "cover",
+                    margin: "auto",
+                  }}
                   src={`${item}?w=248&fit=crop&auto=format`}
                   srcSet={`${item}?w=248&fit=crop&auto=format&dpr=2 2x`}
                   alt={item.name}

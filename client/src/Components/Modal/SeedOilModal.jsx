@@ -8,8 +8,6 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
 export default function SeedOilModal({ place, setSeedOilModal }) {
-  const firstFour = place.photos.slice(0, 5);
-
   const AlertComponent = () => {
     if (place.userRating <= 1) {
       return (
@@ -48,6 +46,8 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
     }
   };
 
+  const imgSlice = place.photos.slice(0, 4);
+
   return (
     <div>
       <Card sx={{ p: 3 }}>
@@ -71,18 +71,18 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
           readOnly
         ></Rating>
 
-        <div>
-          <img
-            component="img"
-            style={{ maxWidth: "200px", height: "auto" }}
-            src={place.imgFile}
-          />
-        </div>
         <Box>
           <ImageList variant="masonry" cols={4} gap={8}>
-            {firstFour.map((item) => (
+            {imgSlice.map((item) => (
               <ImageListItem key={item.img}>
                 <img
+                  style={{
+                    width: "100%",
+                    maxWidth: "200px",
+                    height: "200px",
+                    objectFit: "cover",
+                    margin: "auto",
+                  }}
                   src={`${item}?w=248&fit=crop&auto=format`}
                   srcSet={`${item}?w=248&fit=crop&auto=format&dpr=2 2x`}
                   alt={item.name}
@@ -95,10 +95,31 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
 
         <AlertComponent />
         <Stack marginTop={2} direction="row" justifyContent="space-between">
-          <Typography variant="h6">post from User: {place.input}</Typography>
-          <Typography variant="h6">User Input: {place.select}</Typography>
-          <Typography variant="h6">Contacted by: {place.user}</Typography>
+          <Alert severity="success">User description: {place.input}</Alert>
+          <Alert severity="success">User Input: {place.select}</Alert>
+          <Alert severity="success">Contacted by Username: {place.user}</Alert>
         </Stack>
+
+        {place.imgFile && (
+          <Stack
+            marginTop={2}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            gap={4}
+          >
+            <Alert severity="success">Email Proof:</Alert>
+            <img
+              component="img"
+              style={{
+                width: "200px",
+                height: "200px",
+                objectFit: "cover",
+              }}
+              src={place.imgFile}
+            />
+          </Stack>
+        )}
       </Card>
     </div>
   );

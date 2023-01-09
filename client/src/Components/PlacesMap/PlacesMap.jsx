@@ -23,27 +23,21 @@ const PlacesMap = ({ place }) => {
           {isDesktop.matches ? (
             <LocationOnIcon color="primary" fontSize="large" />
           ) : (
-            <Paper elevation={3} className="paper">
-              <Typography
-                textAlign="center"
-                fontSize={12}
-                variant="subtitle2"
-                gutterBottom
-              >
+            <Paper elevation={10} className="paper">
+              <Typography textAlign="center" fontSize={12} variant="subtitle2">
                 {place.name}
               </Typography>
-              <Typography
-                textAlign="center"
-                fontSize={12}
-                variant="subtitle2"
-                gutterBottom
-              ></Typography>
 
               <img
-                style={{ maxWidth: "100%", height: "auto" }}
+                style={{
+                  width: "75px",
+                  height: "75px",
+                  objectFit: "cover",
+                  margin: "auto",
+                }}
                 src={
                   place.photos
-                    ? place.photos[4]
+                    ? place.photos[0]
                     : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
                 }
                 alt={place.name}
@@ -65,8 +59,13 @@ const PlacesMap = ({ place }) => {
         <>
           {modal.map((place, i) => {
             return (
-              <Drawer open={open} onClose={() => setOpen(false)} key={i} anchor="bottom">
-                <Box  className="modal" role="presentation">
+              <Drawer
+                open={open}
+                onClose={() => setOpen(false)}
+                key={i}
+                anchor="bottom"
+              >
+                <Box className="modal" role="presentation">
                   <Modal setOpen={setOpen} place={place} />
                 </Box>
               </Drawer>
