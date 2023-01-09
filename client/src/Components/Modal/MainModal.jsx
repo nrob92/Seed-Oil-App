@@ -1,17 +1,21 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Button, Stack } from "@mui/material";
+import { Button, Stack, Box, Link } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Alert from "@mui/material/Alert";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
 const MainModal = ({ place, setOpen, openModalRating, setOpenModalRating }) => {
   const toggleModals = () => {
     setOpenModalRating(!openModalRating);
   };
+  const firstFour = place.photos.slice(0, 5);
+
   return (
     <div>
-      <Card sx={{ maxWidth: 345, p: 3 }}>
+      <Card sx={{ p: 3 }}>
         <CardHeader
           action={
             <Button
@@ -31,31 +35,38 @@ const MainModal = ({ place, setOpen, openModalRating, setOpenModalRating }) => {
           value={Number(place.rating)}
           readOnly
         ></Rating>
-        <img
-          component="img"
-          style={{ maxWidth: "100%", height: "auto" }}
-          src={
-            place.photos
-              ? place.photos[4]
-              : "https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
-          }
-          alt={place.name}
-        />
+        <Box>
+          <ImageList variant="masonry" cols={5} gap={8}>
+            {firstFour.map((item) => (
+              <ImageListItem key={item.img}>
+                <img
+                  src={`${item}?w=248&fit=crop&auto=format`}
+                  srcSet={`${item}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  alt={item.name}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
 
-        <Alert sx={{ p: 0, mt: 1 }} severity="error">
-          Assume the worst
+        <Alert sx={{ mt: 1 }} severity="error">
+          Assume the worst, nearly all restaraunts use seed oils.
         </Alert>
-        <label>Nearly all restaraunts use seed oils.</label>
         <Stack
           marginTop={2}
           direction="row"
-          justifyContent="space-evenly"
-          spacing={2}
+          justifyContent="center"
+          spacing={4}
         >
           <Button onClick={toggleModals} variant="contained">
             File Report
           </Button>
           <Button variant="contained">{place.phone}</Button>
+
+          <Link href={place.website} target="_blank">
+            <Button variant="contained">Website</Button>
+          </Link>
         </Stack>
       </Card>
     </div>

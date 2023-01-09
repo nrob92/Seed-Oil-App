@@ -9,8 +9,7 @@ import AppContext from "../../Contexts/AppContext";
 import Rating from "@mui/material/Rating";
 import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import { Button, Divider, Stack, Typography } from "@mui/material";
+import { Button, Divider, Stack, Typography, Box } from "@mui/material";
 
 const convertToBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -122,58 +121,83 @@ const FormModal = ({ place, setOpen }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Card elevation={10} sx={{ maxWidth: 345, p: 3 }}>
-          <CardHeader
-            action={
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => setOpen(false)}
-              >
-                X CLOSE
-              </Button>
-            }
-            title={place.name}
-          />
-
-          <Rating
-            name="simple-controlled"
-            value={userRating}
-            onChange={(event, newValue) => {
-              setUserRating(newValue);
-            }}
-          />
-
-          <AlertComponent />
-
-          <Divider sx={{ borderBottomWidth: "3px", mt: 2 }} />
-          <FormControl sx={{ mt: 2 }} fullWidth>
-            <InputLabel id="demo-simple-select-label">Select Source</InputLabel>
-            <Select
-              fullWidth
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="Select Source"
-              value={select}
-              name="select"
-              onChange={(e) => setSelect(e.target.value)}
-            >
-              <MenuItem value={"Visible Kitchen"}>Visible Kitchen</MenuItem>
-              <MenuItem value={"Kitchen Confirmed"}>Kitchen Confirmed</MenuItem>
-              <MenuItem value={"In Writing"}>In Writing</MenuItem>
-            </Select>
-          </FormControl>
-          <Divider sx={{ borderBottomWidth: "3px", mt: 2 }} />
-
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 3,
+      }}
+    >
+      <form
+        style={{
+          border: "1px solid",
+          borderRadius: "5px",
+          maxWidth: "600px",
+          width: "100%",
+        }}
+        onSubmit={handleSubmit}
+      >
+        <Card elevation={10} sx={{ p: 2 }}>
           <Stack
-            marginTop={2}
-            direction="row"
-            justifyContent="space-evenly"
-            spacing={2}
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
           >
+            <Typography variant="h5">{place.name}</Typography>
+
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => setOpen(false)}
+            >
+              X CLOSE
+            </Button>
+          </Stack>
+          <Stack
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
+            gap={2}
+            sx={{ flexDirection: "column" }}
+          >
+            <Rating
+              name="simple-controlled"
+              value={userRating}
+              onChange={(event, newValue) => {
+                setUserRating(newValue);
+              }}
+            />
+            <AlertComponent />
+            <Divider sx={{ borderBottomWidth: "3px" }} />
+            <FormControl>
+              <InputLabel id="demo-simple-select-label">
+                Select Source
+              </InputLabel>
+              <Select
+                sx={{ pl: 2 }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Select Source"
+                value={select}
+                name="select"
+                onChange={(e) => setSelect(e.target.value)}
+              >
+                <MenuItem value={"Visible Kitchen"}>Visible Kitchen</MenuItem>
+                <MenuItem value={"Kitchen Confirmed"}>
+                  Kitchen Confirmed
+                </MenuItem>
+                <MenuItem value={"In Writing"}>In Writing</MenuItem>
+              </Select>
+            </FormControl>
+            <Divider sx={{ borderBottomWidth: "3px" }} />
+
             <TextField
+              inputProps={{
+                style: {
+                  marginLeft: 20,
+                },
+              }}
               id="outlined-basic"
               label="Source Body"
               variant="outlined"
@@ -181,41 +205,37 @@ const FormModal = ({ place, setOpen }) => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
+            <input
+              type="file"
+              label="Image"
+              variant="outlined"
+              name="myFile"
+              accept=".jpeg, .png, .jpg"
+              onChange={(e) => handleFileUpload(e)}
+            />
+            {checked ? (
+              userData.user
+            ) : (
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Button onClick={getUserData} variant="contained">
+                  userName
+                </Button>
+                <Typography variant="subtitle2">
+                  click username button if you have contacted restaraunt
+                </Typography>
+              </Stack>
+            )}
+            <Button type="submit" variant="contained">
+              Submit
+            </Button>
           </Stack>
-          <label
-            htmlFor="file-upload"
-            id="demo-simple-select-label"
-            className="custom-file-upload"
-          ></label>
-          <input
-            type="file"
-            label="Image"
-            variant="outlined"
-            name="myFile"
-            accept=".jpeg, .png, .jpg"
-            onChange={(e) => handleFileUpload(e)}
-          />
-          {checked ? (
-            userData.user
-          ) : (
-            <Stack direction="row">
-              <Button
-                sx={{ width: 30 }}
-                onClick={getUserData}
-                variant="contained"
-              ></Button>
-              <Typography variant="subtitle2">
-                click button if you have contacted restaraunt
-              </Typography>
-            </Stack>
-          )}
-
-          <Button type="submit" variant="contained">
-            Submit
-          </Button>
         </Card>
       </form>
-    </div>
+    </Box>
   );
 };
 

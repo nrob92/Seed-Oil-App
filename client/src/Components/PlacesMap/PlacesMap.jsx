@@ -1,6 +1,6 @@
 import React from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Paper, Typography, Box } from "@mui/material";
+import { Paper, Typography, Box, Drawer } from "@mui/material";
 import Modal from "../Modal/Modal";
 import Rating from "@mui/material/Rating";
 import SeedOilMap from "../SeedOilMap/SeedOilMap";
@@ -65,9 +65,11 @@ const PlacesMap = ({ place }) => {
         <>
           {modal.map((place, i) => {
             return (
-              <Box key={i} className="modal">
-                <Modal setOpen={setOpen} place={place} />
-              </Box>
+              <Drawer open={open} onClose={() => setOpen(false)} key={i} anchor="bottom">
+                <Box  className="modal" role="presentation">
+                  <Modal setOpen={setOpen} place={place} />
+                </Box>
+              </Drawer>
             );
           })}
         </>

@@ -10,9 +10,47 @@ import ImageListItem from "@mui/material/ImageListItem";
 export default function SeedOilModal({ place, setSeedOilModal }) {
   const firstFour = place.photos.slice(0, 5);
 
+  const AlertComponent = () => {
+    if (place.userRating <= 1) {
+      return (
+        <Alert sx={{ marginTop: "5px" }} severity="error">
+          terrible
+        </Alert>
+      );
+    }
+    if (place.userRating <= 2.5) {
+      return (
+        <Alert sx={{ marginTop: "5px" }} severity="warning">
+          bad
+        </Alert>
+      );
+    }
+    if (place.userRating <= 3.5) {
+      return (
+        <Alert sx={{ marginTop: "5px" }} severity="info">
+          ok
+        </Alert>
+      );
+    }
+    if (place.userRating <= 4) {
+      return (
+        <Alert sx={{ marginTop: "5px" }} severity="success">
+          good
+        </Alert>
+      );
+    }
+    if (place.userRating > 4) {
+      return (
+        <Alert sx={{ marginTop: "5px" }} variant="filled" severity="success">
+          Best!!!
+        </Alert>
+      );
+    }
+  };
+
   return (
     <div>
-      <Card sx={{ maxWidth: 345, p: 3 }}>
+      <Card sx={{ p: 3 }}>
         <CardHeader
           action={
             <Button
@@ -40,8 +78,8 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
             src={place.imgFile}
           />
         </div>
-        <Box sx={{ overflowY: "scroll" }}>
-          <ImageList variant="masonry" cols={2} gap={8}>
+        <Box>
+          <ImageList variant="masonry" cols={4} gap={8}>
             {firstFour.map((item) => (
               <ImageListItem key={item.img}>
                 <img
@@ -55,19 +93,11 @@ export default function SeedOilModal({ place, setSeedOilModal }) {
           </ImageList>
         </Box>
 
-        <Alert sx={{ p: 0, mt: 1 }} severity="error">
-          Assume the worst
-        </Alert>
-        <label>Nearly all restaraunts use seed oils.</label>
-        <Stack
-          marginTop={2}
-          direction="row"
-          justifyContent="space-evenly"
-          spacing={2}
-        >
-          {" "}
-          <Typography>{place.input}</Typography>
-          <Typography>{place.select}</Typography>
+        <AlertComponent />
+        <Stack marginTop={2} direction="row" justifyContent="space-between">
+          <Typography variant="h6">post from User: {place.input}</Typography>
+          <Typography variant="h6">User Input: {place.select}</Typography>
+          <Typography variant="h6">Contacted by: {place.user}</Typography>
         </Stack>
       </Card>
     </div>

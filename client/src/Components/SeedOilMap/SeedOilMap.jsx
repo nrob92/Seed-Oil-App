@@ -1,6 +1,6 @@
 import React from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Paper, Typography, Box } from "@mui/material";
+import { Paper, Typography, Box, Drawer } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SeedOilModal from "../Modal/SeedOilModal";
@@ -56,9 +56,19 @@ const SeedOilMap = ({ place }) => {
         <>
           {modal.map((place, i) => {
             return (
-              <Box key={i} className="modal">
-                <SeedOilModal setSeedOilModal={setSeedOilModal} place={place} />
-              </Box>
+              <Drawer
+                open={seedOilModal}
+                onClose={() => setSeedOilModal(false)}
+                key={i}
+                anchor="bottom"
+              >
+                <Box>
+                  <SeedOilModal
+                    setSeedOilModal={setSeedOilModal}
+                    place={place}
+                  />
+                </Box>
+              </Drawer>
             );
           })}
         </>
