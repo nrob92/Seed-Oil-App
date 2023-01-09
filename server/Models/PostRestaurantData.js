@@ -33,8 +33,20 @@ const postRestaurantData = new Schema({
     type: String,
     required: true,
   },
-  id: {
+  placeId: {
     type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  open: {
+    type: String,
+    required: true,
+  },
+  hours: {
+    type: Array,
     required: true,
   },
 });

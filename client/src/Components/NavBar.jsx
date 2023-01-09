@@ -91,7 +91,12 @@ export default function NavBar() {
     const website = await autocomplete.getPlace().website;
     const address = await autocomplete.getPlace().formatted_address;
     const phone = await autocomplete.getPlace().formatted_phone_number;
-    const id = await autocomplete.getPlace().place_id;
+    const placeId = await autocomplete.getPlace().place_id;
+    const price = await autocomplete.getPlace().price_level;
+    const open = await autocomplete.getPlace().current_opening_hours.open_now;
+    const hours = await autocomplete
+      .getPlace()
+      .current_opening_hours.periods.map((hour) => hour);
     setCoords({ lat, lng });
     setAllValues({
       lat,
@@ -101,8 +106,11 @@ export default function NavBar() {
       rating,
       website,
       address,
+      placeId,
       phone,
-      id,
+      price,
+      open,
+      hours,
     });
   };
 
@@ -121,7 +129,10 @@ export default function NavBar() {
               website: allValues.website,
               address: allValues.address,
               phone: allValues.phone,
-              id: allValues.id,
+              price: allValues.price,
+              open: allValues.open,
+              hours: allValues.hours,
+              placeId: allValues.placeId,
             }
           );
           setRestaurantData([response.data, ...restaurantData]);

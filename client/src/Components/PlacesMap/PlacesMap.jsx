@@ -6,7 +6,7 @@ import Rating from "@mui/material/Rating";
 import SeedOilMap from "../SeedOilMap/SeedOilMap";
 
 const PlacesMap = ({ place }) => {
-  const isDesktop = window.matchMedia("(max-width: 600px)");
+  const isDesktop = window.matchMedia("(max-width: 650px)");
   const [open, setOpen] = React.useState(false);
   const [modal, setModal] = React.useState([]);
   const filterName = (name) => {

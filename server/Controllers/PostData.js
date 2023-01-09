@@ -29,10 +29,7 @@ module.exports.postSeedOilData = async (req, res) => {
 
 module.exports.postRestaurantData = async (req, res) => {
   try {
-    const { lat, lng, photos, name, rating, website, address, phone, id } =
-      req.body;
-
-    const restaurantData = await RestaurantData.create({
+    const {
       lat,
       lng,
       photos,
@@ -41,10 +38,33 @@ module.exports.postRestaurantData = async (req, res) => {
       website,
       address,
       phone,
-      id,
-    });
+      placeId,
+      price,
+      open,
+      hours,
+    } = req.body;
 
-    res.status(200).json(restaurantData);
+    const doc = await RestaurantData.findOne({ placeId: placeId });
+    if (!doc) {
+      const restaurantData = await RestaurantData.create({
+        lat,
+        lng,
+        photos,
+        name,
+        rating,
+        website,
+        address,
+        phone,
+        placeId,
+        price,
+        open,
+        hours,
+      });
+      res.status(200).json(restaurantData);
+      // doc with existing_id already exists, do something else
+    } else {
+      // doc with existing_id created successfully
+    }
   } catch (err) {
     console.log(err);
   }

@@ -1,21 +1,14 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  CardActions,
-} from "@mui/material";
+import { Box, Typography, Button, Card, CardContent } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import Rating from "@mui/material/Rating";
 import "../PlaceDetails/placeDetailsStyle.css";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 const PlaceDetails = ({ place, selected, refProp }) => {
   if (selected)
     refProp?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-
   return (
     <Card ref={refProp} sx={{ margin: 1 }} elevation={6}>
       <img
@@ -31,49 +24,48 @@ const PlaceDetails = ({ place, selected, refProp }) => {
         <Typography gutterBottom variant="h5">
           {place.name}
         </Typography>
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="subtitle1">Price</Typography>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="subtitle2">Price</Typography>
+          <Rating
+            name="text-feedback"
+            value={place.price}
+            readOnly
+            precision={0.5}
+            icon={<AttachMoneyIcon fontSize="inherit" />}
+            emptyIcon={<AttachMoneyIcon fontSize="inherit" />}
+          />
         </Box>
-        <Box display="flex" justifyContent="space-between">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="subtitle2">Rating</Typography>
           <Rating
             value={Number(place.rating)}
             precision={0.5}
             readOnly
           ></Rating>
         </Box>
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="subtitle1">Ranking</Typography>
-        </Box>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="subtitle2">Address</Typography>
 
-        {place?.address && (
-          <Typography
-            gutterBottom
-            variant="subtitle2"
-            color="textSecondary"
-            className="spacing"
-          >
+          <Typography variant="subtitle2" fontSize="10px" color="textSecondary">
             <LocationOnIcon /> {place.address}
           </Typography>
-        )}
-        {place?.phone && (
-          <Typography
-            gutterBottom
-            variant="subtitle2"
-            color="textSecondary"
-            className="spacing"
-          >
+        </Box>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="subtitle1">Phone</Typography>
+
+          <Typography gutterBottom variant="subtitle2" color="textSecondary">
             <PhoneIcon /> {place.phone}
           </Typography>
-        )}
-        <CardActions>
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => window.open(place.website, "_blank")}
-          >
-            Website
-          </Button>
-        </CardActions>
+        </Box>
+
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          onClick={() => window.open(place.website, "_blank")}
+        >
+          Website
+        </Button>
       </CardContent>
     </Card>
   );
